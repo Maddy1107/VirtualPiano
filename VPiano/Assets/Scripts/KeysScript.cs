@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class KeysScript : MonoBehaviour
 {
@@ -10,7 +9,7 @@ public class KeysScript : MonoBehaviour
 
     float KeyRotAngle = 10f;
 
-    Color KeyPressColor = Color.cyan;
+    Color KeyPressColor = Color.magenta;
 
     /// <summary>
     /// Changeable variables
@@ -28,8 +27,7 @@ public class KeysScript : MonoBehaviour
 
     bool KeyIsPressed = false;
 
-    float KeyMovesmoothness;
-    //private DateTime m_prevCollisionTime;
+    float Keysmoothness;
 
     private void Start()
     {
@@ -46,24 +44,26 @@ public class KeysScript : MonoBehaviour
 
     private void Update()
     {
-        KeyMat.color = KeyCurrColor;
+        Smoothening();
+    }
 
-        if(KeyIsPressed)
+    private void Smoothening()
+    {
+        if (KeyIsPressed)
         {
-            KeyMovesmoothness = 10f;
+            Keysmoothness = 10f;
         }
         else
         {
-            KeyMovesmoothness = 2f;
+            Keysmoothness = 5f;
         }
-        transform.localRotation = Quaternion.Lerp(transform.localRotation, KeyCurrRot, KeyMovesmoothness * Time.deltaTime);
+        transform.localRotation = Quaternion.Lerp(transform.localRotation, KeyCurrRot, Keysmoothness * Time.deltaTime);
+        KeyMat.color = Color.Lerp(KeyMat.color, KeyCurrColor, Keysmoothness * Time.deltaTime);
     }
 
     private void KeyPressed()
     {
         KeyIsPressed = true;
-
-        //m_prevCollisionTime = System.DateTime.Now;
 
         UIManager.instance.showName(gameObject);
 
@@ -83,9 +83,6 @@ public class KeysScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //if (System.DateTime.Now.Subtract(m_prevCollisionTime).TotalMilliseconds < 500)
-            //return;
-
         if (!collision.gameObject.CompareTag("Keys"))
         {
             if(!KeyIsPressed)
