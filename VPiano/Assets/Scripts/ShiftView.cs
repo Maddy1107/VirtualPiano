@@ -2,8 +2,8 @@
 
 public class ShiftView : MonoBehaviour
 {
-    float LeapRigEndLeft;
-    float LeapRigEndRight;
+    float LeapRigEndLeft = 30f;
+    float LeapRigEndRight = 45f;
 
     float CameraEndLeft = 26f;
     float CameraEndRight = 45f;
@@ -23,19 +23,19 @@ public class ShiftView : MonoBehaviour
 
     private void Update()
     {
-        float LeapRigEndLeft = LeapRigObj.transform.position.x - (LeapRigObj.transform.localScale.x / 2);
-        float LeapRigEndRight = LeapRigObj.transform.position.x + (LeapRigObj.transform.localScale.x / 2);
+        float LeapRigEndLeftBound = LeapRigObj.transform.position.x - 7;
+        float LeapRigEndRightBound = LeapRigObj.transform.position.x + 7;
         float HandXPos = HandDetailsExtractor.instance.GetHandPos().x;
 
-        if (HandXPos <= LeapRigEndLeft)
+        if (HandXPos <= LeapRigEndLeftBound)
         { ViewShift("Left"); }
-        else if (HandXPos >= LeapRigEndRight)
+        else if (HandXPos >= LeapRigEndRightBound)
         { ViewShift("Right"); }
 
         Shift();
         Debug.Log("Hand PosX = " + HandXPos);
-        Debug.Log("LeftEnd = " + LeapRigEndLeft);
-        Debug.Log("RightEnd = " + LeapRigEndRight);
+        Debug.Log("LeftEnd = " + LeapRigEndLeftBound);
+        Debug.Log("RightEnd = " + LeapRigEndRightBound);
     }
 
     public void Shift()
@@ -56,7 +56,7 @@ public class ShiftView : MonoBehaviour
         }
         else if (direction == "Right")
         {
-            if (Camera.main.transform.position.x < CameraEndRight)
+            if (Camera.main.transform.position.x > CameraEndRight)
                 return;
 
             LeapRigTarget.x = LeapRigEndRight;
