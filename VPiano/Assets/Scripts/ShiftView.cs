@@ -2,18 +2,22 @@
 
 public class ShiftView : MonoBehaviour
 {
-    float LeapRigEndLeft = 30f;
-    float LeapRigEndRight = 45f;
+    float EndLeft = 25f;
+    float EndRight = 55f;
 
-    float CameraEndLeft = 26f;
-    float CameraEndRight = 45f;
+    float shiftAmount = 1.5f;
 
     public GameObject LeapRigObj;
 
-    Vector3 LeapRigTarget;
-    Vector3 CameraTarget;
+    [SerializeField] Vector3 LeapRigTarget;
+    [SerializeField] Vector3 CameraTarget;
 
     float smoothness = 2f;
+
+    float LeapRigEndLeftBound;
+    float LeapRigEndRightBound;
+    float LeftHandXPos;
+    float RightHandXPos;
 
     private void Start()
     {
@@ -23,19 +27,25 @@ public class ShiftView : MonoBehaviour
 
     private void Update()
     {
-        float LeapRigEndLeftBound = LeapRigObj.transform.position.x - 7;
-        float LeapRigEndRightBound = LeapRigObj.transform.position.x + 7;
-        float HandXPos = HandDetailsExtractor.instance.GetHandPos().x;
+        LeapRigEndLeftBound = LeapRigTarget.x - 7;
+        LeapRigEndRightBound = LeapRigTarget.x + 7;
 
-        if (HandXPos <= LeapRigEndLeftBound)
-        { ViewShift("Left"); }
-        else if (HandXPos >= LeapRigEndRightBound)
-        { ViewShift("Right"); }
+        LeftHandXPos = LeftHandDetailsExtractor.instance.GetHandPos().x;
+        RightHandXPos = RightHandDetailsExtractor.instance.GetHandPos().x;
+
+        if (LeftHandXPos <= LeapRigEndLeftBound &&
+            LeftHandXPos <= LeapRigTarget.x)
+        {
+            ViewShift("Left");
+        }
+
+        if (RightHandXPos >= LeapRigEndRightBound &&
+            RightHandXPos >= LeapRigTarget.x)
+        { 
+            ViewShift("Right");
+        }
 
         Shift();
-        Debug.Log("Hand PosX = " + HandXPos);
-        Debug.Log("LeftEnd = " + LeapRigEndLeftBound);
-        Debug.Log("RightEnd = " + LeapRigEndRightBound);
     }
 
     public void Shift()
@@ -48,19 +58,21 @@ public class ShiftView : MonoBehaviour
     {
         if (direction == "Left")
         {
-            if (Camera.main.transform.position.x < CameraEndLeft)
-                return;
-
-            LeapRigTarget.x = LeapRigEndLeft;
-            CameraTarget.x = CameraEndLeft;
+            if (Camera.main.transform.position.x >= EndLeft)
+            {
+                //LeapRigTarget.x = CameraTarget.x -= LeftHandXPos <= LeapRigEndLeftBound && LeftHandXPos <= LeapRigTarget.x ? shiftAmount : 0;
+                LeapRigTarget.x -= shiftAmount;
+                CameraTarget.x -= shiftAmount;
+            }            
         }
         else if (direction == "Right")
         {
-            if (Camera.main.transform.position.x > CameraEndRight)
-                return;
-
-            LeapRigTarget.x = LeapRigEndRight;
-            CameraTarget.x = CameraEndRight;
+            if (Camera.main.transform.position.x <= EndRight)
+            {
+                //LeapRigTarget.x = CameraTarget.x += RightHandXPos >= LeapRigEndRightBound && RightHandXPos >= LeapRigTarget.x ? shiftAmount : 0;
+                LeapRigTarget.x += shiftAmount;
+                CameraTarget.x += shiftAmount;
+            }       
         }
     }
 }

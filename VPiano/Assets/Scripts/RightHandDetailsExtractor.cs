@@ -2,13 +2,11 @@
 using Leap;
 using Leap.Unity;
 
-public class HandDetailsExtractor : MonoBehaviour
+public class RightHandDetailsExtractor : MonoBehaviour
 {
-    public static HandDetailsExtractor instance;
+    public static RightHandDetailsExtractor instance;
 
     Hand hand;
-
-    Controller controller;
 
     private void Awake()
     {
@@ -27,15 +25,4 @@ public class HandDetailsExtractor : MonoBehaviour
     {
         return hand.PalmPosition.ToVector3();
     }
-
-    /*public bool GetHandLeft()
-    {
-        return hand.IsLeft;
-    }
-
-    public bool GetHandRight()
-    {
-        return hand.IsRight;
-    }*/
-
 }

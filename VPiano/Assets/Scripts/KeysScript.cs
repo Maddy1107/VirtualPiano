@@ -49,14 +49,8 @@ public class KeysScript : MonoBehaviour
 
     private void Smoothening()
     {
-        if (KeyIsPressed)
-        {
-            Keysmoothness = 10f;
-        }
-        else
-        {
-            Keysmoothness = 5f;
-        }
+        Keysmoothness = KeyIsPressed ? 10f : 5f;
+        
         transform.localRotation = Quaternion.Lerp(transform.localRotation, KeyCurrRot, Keysmoothness * Time.deltaTime);
         KeyMat.color = Color.Lerp(KeyMat.color, KeyCurrColor, Keysmoothness * Time.deltaTime);
     }
