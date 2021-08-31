@@ -55,7 +55,7 @@ public class KeysScript : MonoBehaviour
         KeyMat.color = Color.Lerp(KeyMat.color, KeyCurrColor, Keysmoothness * Time.deltaTime);
     }
 
-    private void KeyPressed()
+    public void KeyPressed()
     {
         KeyIsPressed = true;
 
@@ -67,7 +67,7 @@ public class KeysScript : MonoBehaviour
         KeySound.Play();
     }
 
-    private void KeyUnPressed()
+    public void KeyUnPressed()
     {
         KeyIsPressed = false;
 

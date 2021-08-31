@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-public class ReadExtractedFile
+public static class ReadExtractedFile
 {
     public static List<string> NoteKey = new List<string>();
     public static List<float> Times = new List<float>();
 
-    public static void readTextFile(string file_path)
+    public static void ReadTextFile(string file_path)
     {
         var sr = new StreamReader(file_path);
         var fileContents = sr.ReadToEnd();

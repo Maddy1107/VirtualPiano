@@ -25,4 +25,9 @@ public class LeftHandDetailsExtractor : MonoBehaviour
     {
         return hand.PalmPosition.ToVector3();
     }
+
+    public Vector3 GetHandDirection()
+    {
+        return hand.Direction.ToVector3();
+    }
 }

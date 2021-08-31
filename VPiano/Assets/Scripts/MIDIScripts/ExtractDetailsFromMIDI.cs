@@ -2,15 +2,9 @@
 using Melanchall.DryWetMidi.Interaction;
 using System.IO;
 using System.Linq;
-using UnityEngine;
 
-public class ExtractDetailsFromMIDI : MonoBehaviour
+public static class ExtractDetailsFromMIDI
 {
-    private void Start()
-    {
-        GetNotesFromMIDI("Assets/Resources/MIDISongs/Happy_Birthday.mid", "Assets/MIDIExtractedDetails.txt");
-    }
-
     public static void GetNotesFromMIDI(string midiFilePath, string textFilePath)
     {
         var midiFile = MidiFile.Read(midiFilePath);

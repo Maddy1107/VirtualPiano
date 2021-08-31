@@ -27,6 +27,16 @@ public class ShiftView : MonoBehaviour
 
     private void Update()
     {
+        if (LeftHandDetailsExtractor.instance.GetHandDirection().y <= 0.4f)
+        {
+            ShiftCheck();
+        }
+
+        Shift();
+    }
+
+    public void ShiftCheck()
+    {
         LeapRigEndLeftBound = LeapRigTarget.x - 7;
         LeapRigEndRightBound = LeapRigTarget.x + 7;
 
@@ -41,11 +51,9 @@ public class ShiftView : MonoBehaviour
 
         if (RightHandXPos >= LeapRigEndRightBound &&
             RightHandXPos >= LeapRigTarget.x)
-        { 
+        {
             ViewShift("Right");
         }
-
-        Shift();
     }
 
     public void Shift()
