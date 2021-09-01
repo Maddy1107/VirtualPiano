@@ -7,25 +7,46 @@ public class PlayMIDI : MonoBehaviour
     float PlayTime = 0;
     float BPM = 300;
 
-    KeysScript PlayingKey;
+    public KeysScript PlayingKey;
 
-    private void Start()
-    {
-        ExtractDetailsFromMIDI.GetNotesFromMIDI("Assets/Resources/MIDISongs/Happy_Birthday.mid", "Assets/MIDIExtractedDetails.txt");
-        ReadExtractedFile.ReadTextFile("Assets/MIDIExtractedDetails.txt");
-    }
+    public GameObject ShadowP;
+
+    public bool StartPlay = false;
+
     private void Update()
     {
-        playSound();
-        PlayTime += (Time.deltaTime % 1000) * BPM;
+        if(StartPlay)
+        {
+            playSound();
+            IncreasePlayTime();
+            UIManager.instance.SetPlayText("Playing: ");
+        }
+        else if(PlayTime != 0)
+        {
+            UIManager.instance.SetPlayText("Paused: ");
+        }
+        else
+        {
+            UIManager.instance.SetPlayText("Ready to play: ");
+        }
 
+        if (PlayTime >= ReadExtractedFile.Times[ReadExtractedFile.Times.Count() - 1] + 5)
+        {
+            StartPlay = false;
+            PlayTime = 0;
+        }
+    }
+
+    void IncreasePlayTime()
+    {
+        PlayTime += (Time.deltaTime % 1000) * BPM;
     }
 
     void playSound()
     {
         for (int i = 0; i < ReadExtractedFile.Times.Count(); i++)
         {
-            PlayingKey = GameObject.Find(ReadExtractedFile.NoteKey[i]).GetComponent<KeysScript>();
+            PlayingKey = GameObject.Find(ReadExtractedFile.NoteKey[i] + "_Shadow").GetComponent<KeysScript>();
             if ((int)PlayTime <= ReadExtractedFile.Times[i] + 2 && (int)PlayTime >= ReadExtractedFile.Times[i] - 2)
             {
                 if (PlayingKey.gameObject.tag == "ShadowKeys")
@@ -35,6 +56,17 @@ public class PlayMIDI : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void StartstopPlayBool()
+    {
+        StartPlay = !StartPlay;
+    }
+
+    public void ExtractandRead(string songName)
+    {
+        ExtractDetailsFromMIDI.GetNotesFromMIDI("Assets/Resources/MIDISongs/" + songName, "Assets/MIDIExtractedDetails.txt");
+        ReadExtractedFile.ReadTextFile("Assets/MIDIExtractedDetails.txt");
     }
 
     IEnumerator WaitAndRestore(float timeInMilliseconds)

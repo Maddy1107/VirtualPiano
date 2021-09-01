@@ -1,25 +1,18 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+
 
 public class VolumeScript : MonoBehaviour
 {
-    float vol = 1.0f;
+    public float sliderval;
 
     private void Update()
     {
-        vol = Mathf.Clamp(vol, 0.0f, 1.0f);
+        sliderval = GetComponent<Slider>().value;
 
-        Debug.Log(vol);
-
-        AudioListener.volume = vol;
     }
-
-    public void IncreaseVol()
+    public void AdjustVolume()
     {
-        vol += 0.1f;
-    }
-
-    public void DecreaseVol()
-    {
-        vol -= 0.1f;
+        AudioListener.volume = sliderval;
     }
 }
