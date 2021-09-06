@@ -1,17 +1,24 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
 public class PlayMIDI : MonoBehaviour
 {
-    float PlayTime = 0;
+    float PlayTime;
     float BPM = 300;
 
     public KeysScript PlayingKey;
 
+    public bool StartPlay;
+
     public GameObject ShadowP;
 
-    public bool StartPlay = false;
+    private void OnEnable()
+    {
+        ReadExtractedFile.ReadTextFile("Assets/MIDIExtractedDetails.txt");
+        ResetPlay();
+    }
 
     private void Update()
     {
@@ -21,7 +28,7 @@ public class PlayMIDI : MonoBehaviour
             IncreasePlayTime();
             UIManager.instance.SetPlayText("Playing: ");
         }
-        else if(PlayTime != 0)
+        else if(!StartPlay && PlayTime != 0)
         {
             UIManager.instance.SetPlayText("Paused: ");
         }
@@ -30,20 +37,23 @@ public class PlayMIDI : MonoBehaviour
             UIManager.instance.SetPlayText("Ready to play: ");
         }
 
-        if (PlayTime >= ReadExtractedFile.Times[ReadExtractedFile.Times.Count() - 1] + 5)
+        if (ReadExtractedFile.Times.Count != 0)
         {
-            StartPlay = false;
-            PlayTime = 0;
+            if (PlayTime >= ReadExtractedFile.Times[ReadExtractedFile.Times.Count() - 1])
+            {
+                ResetPlay();
+            }
         }
     }
 
     void IncreasePlayTime()
     {
-        PlayTime += (Time.deltaTime % 1000) * BPM;
+        PlayTime += (Time.deltaTime % 1000) * BPMScript.GetBPM();
     }
 
     void playSound()
     {
+        Debug.Log(ShadowP.transform.childCount);
         for (int i = 0; i < ReadExtractedFile.Times.Count(); i++)
         {
             PlayingKey = GameObject.Find(ReadExtractedFile.NoteKey[i] + "_Shadow").GetComponent<KeysScript>();
@@ -67,6 +77,21 @@ public class PlayMIDI : MonoBehaviour
     {
         ExtractDetailsFromMIDI.GetNotesFromMIDI("Assets/Resources/MIDISongs/" + songName, "Assets/MIDIExtractedDetails.txt");
         ReadExtractedFile.ReadTextFile("Assets/MIDIExtractedDetails.txt");
+        ResetPlay();
+    }
+
+    public void ConfirmSong()
+    {
+        String sngnme = GetallFilesFromDir.AllMidis[(int)UIManager.instance.GetKnobPos().y / 50].Name;
+        ExtractandRead(sngnme);
+        UIManager.instance.SetPlayText(sngnme);
+        Debug.Log(sngnme);
+    }
+
+    public void ResetPlay()
+    {
+        StartPlay = false;
+        PlayTime = 0;
     }
 
     IEnumerator WaitAndRestore(float timeInMilliseconds)

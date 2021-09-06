@@ -47,6 +47,9 @@ public class KeysScript : MonoBehaviour
         Smoothening();
     }
 
+    /// <summary>
+    /// Make the key movement smoother
+    /// </summary>
     private void Smoothening()
     {
         Keysmoothness = KeyIsPressed ? 10f : 5f;
@@ -55,6 +58,9 @@ public class KeysScript : MonoBehaviour
         KeyMat.color = Color.Lerp(KeyMat.color, KeyCurrColor, Keysmoothness * Time.deltaTime);
     }
 
+    /// <summary>
+    /// When Key is pressed
+    /// </summary>
     public void KeyPressed()
     {
         KeyIsPressed = true;
@@ -67,6 +73,9 @@ public class KeysScript : MonoBehaviour
         KeySound.Play();
     }
 
+    /// <summary>
+    /// When Key press is done
+    /// </summary>
     public void KeyUnPressed()
     {
         KeyIsPressed = false;
@@ -77,7 +86,8 @@ public class KeysScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!collision.gameObject.CompareTag("Keys"))
+        if (!collision.gameObject.CompareTag("Keys") && 
+            LeftHandDetailsExtractor.instance.GetHandDirection().y <= 0.4f)
         {
             if(!KeyIsPressed)
             {

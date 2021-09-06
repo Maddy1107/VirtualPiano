@@ -16,11 +16,18 @@ public class RightHandDetailsExtractor : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Get the hand component.
+    /// </summary>
     void Update()
     {
         hand = GetComponent<CapsuleHand>().GetLeapHand(); ;
     }
 
+    /// <summary>
+    /// Get hand position
+    /// </summary>
+    /// <returns></returns>
     public Vector3 GetHandPos()
     {
         return hand.PalmPosition.ToVector3();

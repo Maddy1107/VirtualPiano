@@ -27,9 +27,12 @@ public class ShiftView : MonoBehaviour
 
     private void Update()
     {
-        if (LeftHandDetailsExtractor.instance.GetHandDirection().y <= 0.4f)
+        if (LeftHandDetailsExtractor.instance != null)
         {
-            ShiftCheck();
+            if (LeftHandDetailsExtractor.instance.GetHandDirection().y <= 0.4f)
+            {
+                ShiftCheck();
+            }
         }
 
         Shift();
@@ -68,7 +71,6 @@ public class ShiftView : MonoBehaviour
         {
             if (Camera.main.transform.position.x >= EndLeft)
             {
-                //LeapRigTarget.x = CameraTarget.x -= LeftHandXPos <= LeapRigEndLeftBound && LeftHandXPos <= LeapRigTarget.x ? shiftAmount : 0;
                 LeapRigTarget.x -= shiftAmount;
                 CameraTarget.x -= shiftAmount;
             }            
@@ -77,7 +79,6 @@ public class ShiftView : MonoBehaviour
         {
             if (Camera.main.transform.position.x <= EndRight)
             {
-                //LeapRigTarget.x = CameraTarget.x += RightHandXPos >= LeapRigEndRightBound && RightHandXPos >= LeapRigTarget.x ? shiftAmount : 0;
                 LeapRigTarget.x += shiftAmount;
                 CameraTarget.x += shiftAmount;
             }       
