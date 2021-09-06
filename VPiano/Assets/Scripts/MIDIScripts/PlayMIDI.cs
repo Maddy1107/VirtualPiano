@@ -6,17 +6,14 @@ using UnityEngine;
 public class PlayMIDI : MonoBehaviour
 {
     float PlayTime;
-    float BPM = 300;
+    //float BPM = 300;
 
     public KeysScript PlayingKey;
 
     public bool StartPlay;
 
-    public GameObject ShadowP;
-
     private void OnEnable()
     {
-        ReadExtractedFile.ReadTextFile("Assets/MIDIExtractedDetails.txt");
         ResetPlay();
     }
 
@@ -39,7 +36,7 @@ public class PlayMIDI : MonoBehaviour
 
         if (ReadExtractedFile.Times.Count != 0)
         {
-            if (PlayTime >= ReadExtractedFile.Times[ReadExtractedFile.Times.Count() - 1])
+            if (PlayTime >= ReadExtractedFile.Times[ReadExtractedFile.Times.Count() - 1] + 5)
             {
                 ResetPlay();
             }
@@ -53,10 +50,18 @@ public class PlayMIDI : MonoBehaviour
 
     void playSound()
     {
-        Debug.Log(ShadowP.transform.childCount);
         for (int i = 0; i < ReadExtractedFile.Times.Count(); i++)
         {
-            PlayingKey = GameObject.Find(ReadExtractedFile.NoteKey[i] + "_Shadow").GetComponent<KeysScript>();
+            GameObject[] keys = GameObject.FindGameObjectsWithTag("ShadowKeys");
+            foreach (GameObject k in keys)
+            {
+                if (k.name == ReadExtractedFile.NoteKey[i] + "_Shadow")
+                {
+                    PlayingKey = k.GetComponent<KeysScript>();
+                }
+
+            }
+
             if ((int)PlayTime <= ReadExtractedFile.Times[i] + 2 && (int)PlayTime >= ReadExtractedFile.Times[i] - 2)
             {
                 if (PlayingKey.gameObject.tag == "ShadowKeys")
