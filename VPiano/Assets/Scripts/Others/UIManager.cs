@@ -9,23 +9,11 @@ public class UIManager : MonoBehaviour
 
     string KeyName;
 
-    public TextMeshProUGUI NoteText;
+    public TextMeshProUGUI NoteTextLearn;
+
+    public TextMeshProUGUI NoteTextInGame;
 
     public TextMeshProUGUI PlayStateText;
-
-    public TextMeshProUGUI SongTxt;
-
-    public GameObject SongPanel;
-
-    public GameObject SelectSongKnob;
-
-    GameObject knob;
-
-    Vector3 KnobPos;
-     
-    RectTransform KnobrectTransform;
-
-    Vector3 Panelpos;
 
     private void Awake()
     {
@@ -45,23 +33,43 @@ public class UIManager : MonoBehaviour
     /// <param name="Pkey"></param>
     public void showName(GameObject Pkey)
     {
-        if (Pkey.name.Contains("_Shadow"))
+        if(Pkey.name.Contains("_Shadow"))
         {
-            KeyName = Pkey.name.Replace("_Shadow", "");
+            CorrectKeyNamesLearn(Pkey);
+            NoteTextLearn.SetText(KeyName);
         }
-        if (Pkey.name.Contains("S") && Pkey.name.Contains("_Shadow"))
+        else
+        {
+            CorrectKeyNamesInGame(Pkey);
+            NoteTextInGame.SetText(KeyName);
+        }
+        
+    }
+
+    void CorrectKeyNamesInGame(GameObject Pkey)
+    {
+        if (Pkey.name.Contains("S"))
         {
             KeyName = Pkey.name.Replace("S", "#");
-            KeyName = Pkey.name.Replace("_Shadow", "");
         }
         else
         {
             KeyName = Pkey.name;
         }
-
-        NoteText.SetText(KeyName);
     }
 
+    void CorrectKeyNamesLearn(GameObject Pkey)
+    {
+        if (System.Text.RegularExpressions.Regex.IsMatch(Pkey.name, "[A-Z]S[0-9]"))
+        {
+            KeyName = Pkey.name.Replace("_Shadow", "");
+            KeyName = KeyName.Replace("S", "#");
+        }
+        else
+        {
+            KeyName = Pkey.name.Replace("_Shadow", "");
+        }
+    }
     /// <summary>
     /// Set the state of the play in learn mode
     /// </summary>
@@ -69,49 +77,5 @@ public class UIManager : MonoBehaviour
     public void SetPlayText(string Statetext)
     {
         PlayStateText.SetText(Statetext);
-    }
-
-    public void CreateNewButton()
-    {
-        for (int i = 0; i < GetallFilesFromDir.AllMidis.Length; i++)
-        {
-            string txt = GetallFilesFromDir.AllMidis[i].Name;
-
-            Panelpos = SongPanel.transform.position;
-
-            TextMeshProUGUI sngtx = Instantiate(SongTxt, new Vector3(Panelpos.x, Panelpos.y - (i * 50), Panelpos.z), Quaternion.identity);
-
-            var rectTransform = sngtx.GetComponent<RectTransform>();
-            rectTransform.SetParent(SongPanel.transform);
-            txt = txt.Replace(".mid", "");
-            txt = txt.Replace("_", " ");
-            sngtx.SetText(txt);
-        }
-        
-    }
-
-    public void CreateNewKnob()
-    {
-        knob = Instantiate(SelectSongKnob, new Vector3(Panelpos.x - 140, Panelpos.y, Panelpos.z), Quaternion.identity);
-        KnobrectTransform = knob.GetComponent<RectTransform>();
-        KnobrectTransform.SetParent(SongPanel.transform);
-    }
-
-    public void SelectSong()
-    {
-        if(KnobrectTransform.localPosition.y == -(GetallFilesFromDir.AllMidis.Length - 1) * 50)
-        {
-            KnobPos.y = 0;
-        }
-        else
-        {
-            KnobPos.y -= 50;
-        }
-        KnobrectTransform.localPosition = new Vector3(-140, KnobPos.y, KnobPos.z);
-    }
-
-    public Vector3 GetKnobPos()
-    {
-        return KnobrectTransform.localPosition;
     }
 }

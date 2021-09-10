@@ -1,39 +1,27 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
+using System;
 
 public class PlayMIDI : MonoBehaviour
 {
-    float PlayTime;
-    //float BPM = 300;
+    public bool isPlaying;
+
+    private float PlayTime;
 
     public KeysScript PlayingKey;
+    private GameObject CurrKey;
+    private GameObject[] keys;
 
-    public bool StartPlay;
+    public static Action<GameObject> PressButton;
 
     private void OnEnable()
     {
         ResetPlay();
+        keys = GameObject.FindGameObjectsWithTag("ShadowKeys");
     }
 
     private void Update()
     {
-        if(StartPlay)
-        {
-            playSound();
-            IncreasePlayTime();
-            UIManager.instance.SetPlayText("Playing: ");
-        }
-        else if(!StartPlay && PlayTime != 0)
-        {
-            UIManager.instance.SetPlayText("Paused: ");
-        }
-        else
-        {
-            UIManager.instance.SetPlayText("Ready to play: ");
-        }
-
         if (ReadExtractedFile.Times.Count != 0)
         {
             if (PlayTime >= ReadExtractedFile.Times[ReadExtractedFile.Times.Count() - 1] + 5)
@@ -41,65 +29,84 @@ public class PlayMIDI : MonoBehaviour
                 ResetPlay();
             }
         }
+
+        SongLogic();
     }
 
-    void IncreasePlayTime()
+    private void SongLogic()
+    {
+        if (isPlaying)
+        {
+            playSound();
+            IncreasePlayTime();
+            UIManager.instance.SetPlayText("Playing: ");
+        }
+
+        else if (!isPlaying && PlayTime != 0)
+        {
+            UIManager.instance.SetPlayText("Paused: ");
+        }
+
+        else
+        {
+            UIManager.instance.SetPlayText("Ready to play: ");
+        }
+    }
+
+    private void IncreasePlayTime()
     {
         PlayTime += (Time.deltaTime % 1000) * BPMScript.GetBPM();
     }
 
-    void playSound()
+    private void playSound()
     {
         for (int i = 0; i < ReadExtractedFile.Times.Count(); i++)
         {
-            GameObject[] keys = GameObject.FindGameObjectsWithTag("ShadowKeys");
-            foreach (GameObject k in keys)
-            {
-                if (k.name == ReadExtractedFile.NoteKey[i] + "_Shadow")
-                {
-                    PlayingKey = k.GetComponent<KeysScript>();
-                }
-
-            }
+            InitialiseKeys(i);
 
             if ((int)PlayTime <= ReadExtractedFile.Times[i] + 2 && (int)PlayTime >= ReadExtractedFile.Times[i] - 2)
             {
                 if (PlayingKey.gameObject.tag == "ShadowKeys")
                 {
                     PlayingKey.KeyPressed();
-                    StartCoroutine(WaitAndRestore(500));
+                    PressButton?.Invoke(CurrKey);
                 }
+            }
+        }
+    }
+
+    private void InitialiseKeys(int currKey)
+    {
+        foreach (GameObject k in keys)
+        {
+            if (k.name == ReadExtractedFile.NoteKey[currKey] + "_Shadow")
+            {
+                PlayingKey = k.GetComponent<KeysScript>();
+                CurrKey = k;
             }
         }
     }
 
     public void StartstopPlayBool()
     {
-        StartPlay = !StartPlay;
+        isPlaying = !isPlaying;
     }
 
     public void ExtractandRead(string songName)
     {
         ExtractDetailsFromMIDI.GetNotesFromMIDI("Assets/Resources/MIDISongs/" + songName, "Assets/MIDIExtractedDetails.txt");
         ReadExtractedFile.ReadTextFile("Assets/MIDIExtractedDetails.txt");
-        ResetPlay();
-    }
 
-    public void ConfirmSong()
-    {
-        String sngnme = GetallFilesFromDir.AllMidis[(int)UIManager.instance.GetKnobPos().y / 50].Name;
-        ExtractandRead(sngnme);
-        UIManager.instance.SetPlayText(sngnme);
-        Debug.Log(sngnme);
+        ResetPlay();
     }
 
     public void ResetPlay()
     {
-        StartPlay = false;
+        isPlaying = false;
         PlayTime = 0;
     }
 
-    IEnumerator WaitAndRestore(float timeInMilliseconds)
+    /*IEnumerator WaitAndRestore(float timeInMilliseconds)
     {
         var stopwatch = new System.Diagnostics.Stopwatch();
         stopwatch.Start();
@@ -109,5 +116,5 @@ public class PlayMIDI : MonoBehaviour
         }
         stopwatch.Stop();
         PlayingKey.KeyUnPressed();
-    }
+    }*/
 }

@@ -22,7 +22,10 @@ public class LeftHandDetailsExtractor : MonoBehaviour
     void Update()
     {
         GetallFilesFromDir.GetFilesfromDir();
-        hand = GetComponent<CapsuleHand>().GetLeapHand(); ;
+        if (gameObject.activeSelf)
+        {
+            hand = GetComponent<CapsuleHand>().GetLeapHand(); ;
+        }
     }
 
     /// <summary>

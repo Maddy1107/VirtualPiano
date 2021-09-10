@@ -7,6 +7,7 @@ TagManager:
   - Keys
   - LeapRig
   - ShadowKeys
+  - Hand
   layers:
   - Default
   - TransparentFX

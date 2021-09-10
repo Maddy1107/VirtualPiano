@@ -5,6 +5,7 @@ using System.Linq;
 
 public static class ExtractDetailsFromMIDI
 {
+    public static TempoMap tempoMap;
     /// <summary>
     /// Parse the MIDI file and get the respective notes
     /// Also write the notes and teh playtime in the given file.
@@ -18,5 +19,7 @@ public static class ExtractDetailsFromMIDI
         File.WriteAllLines(textFilePath,
                         midiFile.GetNotes()
                                 .Select(n => $"{n.NoteName}{n.Octave} {n.Time}"));
+
+        tempoMap = midiFile.GetTempoMap();
     }
 }

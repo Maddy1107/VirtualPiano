@@ -86,10 +86,10 @@ public class KeysScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!collision.gameObject.CompareTag("Keys") && 
-            LeftHandDetailsExtractor.instance.GetHandDirection().y <= 0.4f)
+        if (!collision.gameObject.CompareTag("Keys"))
         {
-            if(!KeyIsPressed)
+            if(!KeyIsPressed &&
+            LeftHandDetailsExtractor.instance.GetHandDirection().y <= 0.4f)
             {
                 KeyPressed();
             }
@@ -103,6 +103,4 @@ public class KeysScript : MonoBehaviour
             KeyUnPressed();
         }
     }
-
-    
 }

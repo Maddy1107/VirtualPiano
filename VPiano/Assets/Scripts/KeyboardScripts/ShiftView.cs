@@ -42,9 +42,10 @@ public class ShiftView : MonoBehaviour
     {
         LeapRigEndLeftBound = LeapRigTarget.x - 7;
         LeapRigEndRightBound = LeapRigTarget.x + 7;
-
+        
         LeftHandXPos = LeftHandDetailsExtractor.instance.GetHandPos().x;
         RightHandXPos = RightHandDetailsExtractor.instance.GetHandPos().x;
+
 
         if (LeftHandXPos <= LeapRigEndLeftBound &&
             LeftHandXPos <= LeapRigTarget.x)
