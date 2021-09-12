@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
+    private AudioSource MainMenuAudio;
+
     public static UIManager instance;
 
     string KeyName;
@@ -25,6 +27,8 @@ public class UIManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        MainMenuAudio = GetComponent<AudioSource>();
     }
 
     /// <summary>
@@ -77,5 +81,15 @@ public class UIManager : MonoBehaviour
     public void SetPlayText(string Statetext)
     {
         PlayStateText.SetText(Statetext);
+    }
+
+    public void AudioPlay()
+    {
+        MainMenuAudio.Play();
+    }
+
+    public void AudioStop()
+    {
+        MainMenuAudio.Stop();
     }
 }

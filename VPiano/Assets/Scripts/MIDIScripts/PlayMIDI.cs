@@ -64,7 +64,7 @@ public class PlayMIDI : MonoBehaviour
         {
             InitialiseKeys(i);
 
-            if ((int)PlayTime <= ReadExtractedFile.Times[i] + 2 && (int)PlayTime >= ReadExtractedFile.Times[i] - 2)
+            if ((int)PlayTime <= ReadExtractedFile.Times[i] + 5 && (int)PlayTime >= ReadExtractedFile.Times[i] - 5)
             {
                 if (PlayingKey.gameObject.tag == "ShadowKeys")
                 {
