@@ -94,8 +94,8 @@ public class PlayMIDI : MonoBehaviour
 
     public void ExtractandRead(string songName)
     {
-        ExtractDetailsFromMIDI.GetNotesFromMIDI("Assets/Resources/MIDISongs/" + songName, "Assets/MIDIExtractedDetails.txt");
-        ReadExtractedFile.ReadTextFile("Assets/MIDIExtractedDetails.txt");
+        ExtractDetailsFromMIDI.GetNotesFromMIDI("Assets/Resources/MIDISongs/" + songName, "Assets/Resources/MIDIExtractedDetails.txt");
+        ReadExtractedFile.ReadTextFile("Assets/Resources/MIDIExtractedDetails.txt");
 
         ResetPlay();
     }
@@ -105,16 +105,4 @@ public class PlayMIDI : MonoBehaviour
         isPlaying = false;
         PlayTime = 0;
     }
-
-    /*IEnumerator WaitAndRestore(float timeInMilliseconds)
-    {
-        var stopwatch = new System.Diagnostics.Stopwatch();
-        stopwatch.Start();
-        while (stopwatch.ElapsedMilliseconds < timeInMilliseconds)
-        {
-            yield return null;
-        }
-        stopwatch.Stop();
-        PlayingKey.KeyUnPressed();
-    }*/
 }
