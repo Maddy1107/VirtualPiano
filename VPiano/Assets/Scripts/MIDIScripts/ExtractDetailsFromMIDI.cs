@@ -19,7 +19,5 @@ public static class ExtractDetailsFromMIDI
         File.WriteAllLines(textFilePath,
                         midiFile.GetNotes()
                                 .Select(n => $"{n.NoteName}{n.Octave} {n.Time}"));
-
-        tempoMap = midiFile.GetTempoMap();
     }
 }
