@@ -21,10 +21,10 @@ public class RightHandDetailsExtractor : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if (gameObject.activeSelf)
-        {
+        //if (gameObject.activeSelf)
+        //{
             hand = GetComponent<CapsuleHand>().GetLeapHand(); ;
-        }
+        //}
     }
 
     /// <summary>
